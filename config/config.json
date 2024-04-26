@@ -1,8 +1,28 @@
 {
+    "xpMultiplier": 1,
+    "currencyMultiplier": 1,
+    "repMultiplier": 1,
+
     "useStaticType": true,
     "completionOnly": false,
     "explorationOnly": false,
     "eliminationOnly": true,
+
+    "dailyTypes": [
+        "Exploration",
+        "Elimination",
+        "Completion"
+    ],
+    "weeklyTypes": [
+        "Exploration",
+        "Elimination",
+        "Completion"
+    ],
+    "scavTypes": [
+        "Exploration",
+        "Elimination",
+        "Completion"
+    ],
 
     "debugLogging": false
 }
