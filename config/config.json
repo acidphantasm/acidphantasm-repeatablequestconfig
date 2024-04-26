@@ -1,15 +1,16 @@
 {
-    "xpMultiplier": 5,
-    "currencyMultiplier": 5,
-    "repMultiplier": 4,
-    "skillRewardChanceMultiplier": 5,
-    "skillPointRewardMultiplier": 5,
+    "xpMultiplier": 1,
+    "currencyMultiplier": 1,
+    "repMultiplier": 1,
+    "skillRewardChanceMultiplier": 1,
+    "skillPointRewardMultiplier": 1,
 
-    "useStaticType": true,
+    "useSpecificQuestType": true,
     "completionOnly": false,
     "explorationOnly": false,
     "eliminationOnly": true,
 
+    "useRandomQuestType": false,
     "dailyTypes": [
         "Exploration",
         "Elimination",
@@ -26,5 +27,5 @@
         "Completion"
     ],
 
-    "debugLogging": true
+    "debugLogging": false
 }

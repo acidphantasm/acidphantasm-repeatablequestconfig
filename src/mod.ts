@@ -20,25 +20,15 @@ class RQC implements IPreAkiLoadMod, IPostDBLoadMod
     {
         this.mod = "acidphantasm-RQC"; // Set name of mod so we can log it to console later
     }
-    /**
-     * Some work needs to be done prior to SPT code being loaded, registering the profile image + setting trader update time inside the trader config json
-     * @param container Dependency container
-     */
+
+    // PreAKILoad
     public preAkiLoad(container: DependencyContainer): void
     {
-        // Get a logger
+        // Get a logger - I am probably dumb but removing this breaks things - so don't delete it
         this.logger = container.resolve<ILogger>("WinstonLogger");
-
-        // Get SPT code/data we need later
-        /*
-        const preAkiModLoader: PreAkiModLoader = container.resolve<PreAkiModLoader>("PreAkiModLoader");
-        const configServer = container.resolve<ConfigServer>("ConfigServer");
-        const questConfig = configServer.getConfig(ConfigTypes.QUEST);
-        const dailyQuest = questConfig.repeatableQuests[0];
-        const weeklyQuest = questConfig.repeatableQuests[1];
-        const scavQuest = questConfig.repeatableQuests[2];
-        */
     }
+
+    // PostDBLoad
     public postDBLoad(container: DependencyContainer): void
     {
         const start = performance.now();
@@ -54,13 +44,13 @@ class RQC implements IPreAkiLoadMod, IPostDBLoadMod
         const weeklyQuest = repeatableQuests[1];
         const scavQuest = repeatableQuests[2];
         
-        if (RQC.config.useStaticType)
+        if (RQC.config.useSpecificQuestType)
         {
             //Set Static Types
             const typeOfQuest:string = this.getStaticConfigType();
             if (typeOfQuest == null)
             {
-                logger.log(`[${this.mod}] Unable to set quest types. Broken config. Loading default config instead.`, "red");
+                logger.error(`[${this.mod}] [ERROR] Unable to set quest types. Broken config. Loading default quest types instead.`);
             }
             else
             {
@@ -73,7 +63,7 @@ class RQC implements IPreAkiLoadMod, IPostDBLoadMod
                 this.setStaticFenceType(scavQuest, typeOfQuest);
             }
         } 
-        else
+        else if (RQC.config.useRandomQuestType)
         {
             //Set Dynamic Types
             const dailyType = this.getDynamicConfigType(0, "dailyTypes");
@@ -81,7 +71,7 @@ class RQC implements IPreAkiLoadMod, IPostDBLoadMod
             const scavType = this.getDynamicConfigType(2, "scavTypes");
             if (dailyType == null || weeklyType == null || scavType == null)
             {
-                logger.log(`[${this.mod}] Unable to set quest types. Broken config. Loading default config instead.`, "red");
+                logger.error(`[${this.mod}] [ERROR] Unable to set quest types. See above error for troubleshooting. No changes have been made to any quest types.`);
             } 
             else
             {
@@ -96,7 +86,12 @@ class RQC implements IPreAkiLoadMod, IPostDBLoadMod
                 this.setDynamicFenceType(scavQuest, scavType);
             }
         }
+        else
+        {
+            logger.error(`[${this.mod}] [ERROR] No changes made to Repeatable Quest Types. If this is not intentional, validate your config settings.`);
+        }
 
+        //Set XP Multiplier -- Refactor this code later to be cleaner.
         if (RQC.config.xpMultiplier >= 0.01 && RQC.config.xpMultiplier <= 5)
         {
             this.setXPMultiplier(dailyQuest, RQC.config.xpMultiplier);
@@ -105,8 +100,10 @@ class RQC implements IPreAkiLoadMod, IPostDBLoadMod
         }
         else
         {
-            logger.log(`[${this.mod}] Unable to set XP Multiplier. Must be 0.01 - 5.`, "red");
+            logger.error(`[${this.mod}] [ERROR] Unable to set XP Multiplier. Must be between 0.01 - 5. Value out of acceptable range.`);
         }
+
+        //Set Currency Multiplier -- Refactor this code later to be cleaner.
         if (RQC.config.currencyMultiplier >= 0.01 && RQC.config.currencyMultiplier <= 5)
         {
             this.setCurrencyMultiplier(dailyQuest, RQC.config.currencyMultiplier);
@@ -115,8 +112,10 @@ class RQC implements IPreAkiLoadMod, IPostDBLoadMod
         }
         else
         {
-            logger.log(`[${this.mod}] Unable to set Currency Multiplier. Must be 0.01 - 5.`, "red");
+            logger.error(`[${this.mod}] [ERROR] Unable to set Currency Multiplier. Must be 0.01 - 5. Value out of acceptable range.`);
         }
+
+        //Set Reputation Multiplier -- Refactor this code later to be cleaner.
         if (RQC.config.repMultiplier >= 0.01 && RQC.config.repMultiplier <= 5)
         {
             this.setRepMultiplier(dailyQuest, RQC.config.repMultiplier);
@@ -125,8 +124,10 @@ class RQC implements IPreAkiLoadMod, IPostDBLoadMod
         }
         else
         {
-            logger.log(`[${this.mod}] Unable to set Reputation Multiplier. Must be 0.01 - 5.`, "red");
+            logger.error(`[${this.mod}] [ERROR] Unable to set Reputation Multiplier. Must be 0.01 - 5. Value out of acceptable range.`);
         }
+
+        //Set Skill Reward Chance Multiplier -- Refactor this code later to be cleaner.
         if (RQC.config.skillRewardChanceMultiplier >= 0.01 && RQC.config.skillRewardChanceMultiplier <= 5)
         {
             this.setSkillRewardMultiplier(dailyQuest, RQC.config.skillRewardChanceMultiplier);
@@ -135,8 +136,10 @@ class RQC implements IPreAkiLoadMod, IPostDBLoadMod
         }
         else
         {
-            logger.log(`[${this.mod}] Unable to set Skill Reward Chance Multiplier. Must be 0.01 - 5.`, "red");
+            logger.error(`[${this.mod}] [ERROR] Unable to set Skill Reward Chance Multiplier. Must be 0.01 - 5. Value out of acceptable range.`);
         }
+
+        //Set Skill Point Reward Multiplier -- Refactor this code later to be cleaner.
         if (RQC.config.skillPointRewardMultiplier >= 0.01 && RQC.config.skillPointRewardMultiplier <= 5)
         {
             this.setSkillPointRewardMultiplier(dailyQuest, RQC.config.skillPointRewardMultiplier);
@@ -145,9 +148,10 @@ class RQC implements IPreAkiLoadMod, IPostDBLoadMod
         }
         else
         {
-            logger.log(`[${this.mod}] Unable to set Skill Point Reward Multiplier. Must be 0.01 - 5.`, "red");
+            logger.error(`[${this.mod}] [ERROR] Unable to set Skill Point Reward Multiplier. Must be 0.01 - 5. Value out of acceptable range.`);
         }
 
+        // Send logger to debug saying loaded, and finish up performance timer.
         this.logger.debug(`[${this.mod}] loaded... `);
 
         const timeTaken = performance.now() - start;
@@ -288,17 +292,14 @@ class RQC implements IPreAkiLoadMod, IPostDBLoadMod
         }
         if (typeCheck.every((i)=> !i) || typeCheckSize != typeCheckCounter)
         {
-            if (RQC.config.debugLogging)
-            {
-                this.logger.log(`[${this.mod}] Validation Failed for: [${typeString}]. Invalid config file!`, "red");
-            }
+            this.logger.error(`[${this.mod}] [ERROR] Validation Failed for: [${typeString}]. Invalid config setting!`);
             return false;
         }
         else
         {
             if (RQC.config.debugLogging)
             {
-                this.logger.log(`[${this.mod}] Validation Passed for: [${typeString}]. Valid config file!`, "green");
+                this.logger.log(`[${this.mod}] Validation Passed for: [${typeString}]. Valid config setting!`, "green");
             }
             return true;
         }
@@ -357,10 +358,11 @@ interface Config
     repMultiplier: number,
     skillRewardChanceMultiplier: number,
     skillPointRewardMultiplier: number,
-    useStaticType: boolean,
+    useSpecificQuestType: boolean,
     completionOnly: boolean,
     explorationOnly: boolean,
     eliminationOnly: boolean,
+    useRandomQuestType: boolean,
     dailyTypes: string[],
     weeklyTypes: string[],
     scavTypes: string[],
