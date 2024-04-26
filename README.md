@@ -1,13 +1,23 @@
-# Welcome to Harry Hideout by acidphantasm
+# Welcome to Repeatable Quest Config by acidphantasm
 
-This mod is designed and built to ease constructing and upgrading your hideout pre-flea market. You can continue to use it post-flea as Harry contains all items used in construction & upgrades.
+This mod is designed and built to be as easy as possible to use without breaking your game.
 
 ## **Configuration options**
 
-- itemPriceMultiplier
-- useFleaPrices
-- useBarters
-
-Adjust itemPriceMultiplier to adjust item value for both flea & non-flea price.
-If you disable useFleaPrices, the item price will revert to values in items.json
-If you disable useBarters, the high end items will be available for Roubles
+# Multipliers
+- xpMultiplier
+- currencyMultiplier
+- repMultiplier
+- skillRewardChanceMultiplier
+- skillPointRewardMultiplier
+# Specific Quest Types Only
+- useSpecificQuestType
+- completionOnly
+- explorationOnly
+- eliminationOnly
+# Random Select of Quest Types
+- dailyTypes
+- weeklyTypes
+- scavTypes
+# Debug
+- debugLogging
