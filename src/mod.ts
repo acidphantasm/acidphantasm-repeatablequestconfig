@@ -44,7 +44,7 @@ class RQC implements IPreAkiLoadMod, IPostDBLoadMod
         const weeklyQuest = repeatableQuests[1];
         const scavQuest = repeatableQuests[2];
         
-        if (RQC.config.useSpecificQuestType)
+        if (RQC.config.useSpecificQuestType && !RQC.config.useRandomQuestType)
         {
             //Set Static Types
             const typeOfQuest:string = this.getStaticConfigType();
@@ -63,7 +63,7 @@ class RQC implements IPreAkiLoadMod, IPostDBLoadMod
                 this.setStaticFenceType(scavQuest, typeOfQuest);
             }
         } 
-        else if (RQC.config.useRandomQuestType)
+        else if (RQC.config.useRandomQuestType && !RQC.config.useSpecificQuestType)
         {
             //Set Dynamic Types
             const dailyType = this.getDynamicConfigType(0, "dailyTypes");
