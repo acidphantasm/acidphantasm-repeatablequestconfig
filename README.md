@@ -42,7 +42,7 @@ By default, without changing anything the ONLY thing that changes is all new Rep
     - Setting this true will enforce all quests are only of the 'Elimination' type.
 ### Random Select of Quest Types
 - useRandomQuestType
-  - Default: true
+  - Default: false
     - Only ONE of useSpecificQuestType or useRandomQuestType can be true.
     - Setting this true will enforce each quest type (Daily/Weekly/Scav) to be restricted to the options configured below.
     - All below values are the same as vanilla SPT.
