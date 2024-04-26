@@ -54,25 +54,6 @@ class RQC implements IPreAkiLoadMod, IPostDBLoadMod
         const weeklyQuest = repeatableQuests[1];
         const scavQuest = repeatableQuests[2];
         
-        if (RQC.config.xpMultiplier !== 1 && RQC.config.xpMultiplier <= 10)
-        {
-            this.setXPMultiplier(dailyQuest, RQC.config.xpMultiplier);
-            this.setXPMultiplier(weeklyQuest, RQC.config.xpMultiplier);
-            this.setXPMultiplier(scavQuest, RQC.config.xpMultiplier);
-        }
-        if (RQC.config.currencyMultiplier !== 1 && RQC.config.xpMultiplier <= 10)
-        {
-            this.setCurrencyMultiplier(dailyQuest, RQC.config.currencyMultiplier);
-            this.setCurrencyMultiplier(weeklyQuest, RQC.config.currencyMultiplier);
-            this.setCurrencyMultiplier(scavQuest, RQC.config.currencyMultiplier);
-        }
-        if (RQC.config.repMultiplier !== 1 && RQC.config.xpMultiplier <= 10)
-        {
-            this.setRepMultiplier(dailyQuest, RQC.config.repMultiplier);
-            this.setRepMultiplier(weeklyQuest, RQC.config.repMultiplier);
-            this.setRepMultiplier(scavQuest, RQC.config.repMultiplier);
-        }
-
         if (RQC.config.useStaticType)
         {
             //Set Static Types
@@ -87,9 +68,9 @@ class RQC implements IPreAkiLoadMod, IPostDBLoadMod
                 {
                     logger.log(`[${this.mod}] Setting Repeatable Quests Type: ${typeOfQuest}.`, "yellow");
                 }
-                this.setStaticQuestType(dailyQuest, typeOfQuest, "green");
-                this.setStaticQuestType(weeklyQuest, typeOfQuest, "green");
-                this.setStaticFenceType(scavQuest, typeOfQuest, "green");
+                this.setStaticQuestType(dailyQuest, typeOfQuest);
+                this.setStaticQuestType(weeklyQuest, typeOfQuest);
+                this.setStaticFenceType(scavQuest, typeOfQuest);
             }
         } 
         else
@@ -110,10 +91,41 @@ class RQC implements IPreAkiLoadMod, IPostDBLoadMod
                     logger.log(`[${this.mod}] Setting Weekly Repeatable Quests Type: ${weeklyType}.`, "yellow");
                     logger.log(`[${this.mod}] Setting Scav Repeatable Quests Type: ${scavType}.`, "yellow");
                 }
-                this.setDynamicQuestType(dailyQuest, dailyType, "green");
-                this.setDynamicQuestType(weeklyQuest, weeklyType, "green");
-                this.setDynamicFenceType(scavQuest, scavType, "green");
+                this.setDynamicQuestType(dailyQuest, dailyType);
+                this.setDynamicQuestType(weeklyQuest, weeklyType);
+                this.setDynamicFenceType(scavQuest, scavType);
             }
+        }
+
+        if (RQC.config.xpMultiplier >= 0.01 && RQC.config.xpMultiplier <= 5)
+        {
+            this.setXPMultiplier(dailyQuest, RQC.config.xpMultiplier);
+            this.setXPMultiplier(weeklyQuest, RQC.config.xpMultiplier);
+            this.setXPMultiplier(scavQuest, RQC.config.xpMultiplier);
+        }
+        else
+        {
+            logger.log(`[${this.mod}] Unable to set XP Multiplier. Must be 0.01 - 5.`, "red");
+        }
+        if (RQC.config.currencyMultiplier >= 0.01 && RQC.config.currencyMultiplier <= 5)
+        {
+            this.setCurrencyMultiplier(dailyQuest, RQC.config.currencyMultiplier);
+            this.setCurrencyMultiplier(weeklyQuest, RQC.config.currencyMultiplier);
+            this.setCurrencyMultiplier(scavQuest, RQC.config.currencyMultiplier);
+        }
+        else
+        {
+            logger.log(`[${this.mod}] Unable to set Currency Multiplier. Must be 0.01 - 5.`, "red");
+        }
+        if (RQC.config.repMultiplier >= 0.01 && RQC.config.repMultiplier <= 5)
+        {
+            this.setRepMultiplier(dailyQuest, RQC.config.repMultiplier);
+            this.setRepMultiplier(weeklyQuest, RQC.config.repMultiplier);
+            this.setRepMultiplier(scavQuest, RQC.config.repMultiplier);
+        }
+        else
+        {
+            logger.log(`[${this.mod}] Unable to set Reputation Multiplier. Must be 0.01 - 5.`, "red");
         }
 
         this.logger.debug(`[${this.mod}] loaded... `);
@@ -187,7 +199,7 @@ class RQC implements IPreAkiLoadMod, IPostDBLoadMod
         }
     }
 
-    private setStaticQuestType(typeQuest, typeOfQuest, colour: string)
+    private setStaticQuestType(typeQuest, typeOfQuest)
     {
         typeQuest.types = [typeOfQuest];
 
@@ -196,23 +208,23 @@ class RQC implements IPreAkiLoadMod, IPostDBLoadMod
             typeQuest.traderWhitelist[i].questTypes = [typeOfQuest];
             if (RQC.config.debugLogging)
             {
-                this.logger.log(`[${this.mod}] Set [${typeQuest.name}] Trader [${typeQuest.traderWhitelist[i].name}] Quest Types to: [${typeQuest.traderWhitelist[i].questTypes}]. `, colour);
+                this.logger.log(`[${this.mod}] Set [${typeQuest.name}] Trader [${typeQuest.traderWhitelist[i].name}] Quest Types to: [${typeQuest.traderWhitelist[i].questTypes}]. `, "cyan");
             }
         }
     }
 
-    private setStaticFenceType(typeQuest, typeOfQuest, colour: string)
+    private setStaticFenceType(typeQuest, typeOfQuest)
     {
         typeQuest.types = [typeOfQuest];
 
         typeQuest.traderWhitelist[0].questTypes = [typeOfQuest];           
         if (RQC.config.debugLogging)
         {
-            this.logger.log(`[${this.mod}] Set [${typeQuest.name}] Trader [fence] Quest Types to: [${typeQuest.traderWhitelist[0].questTypes}]. `, colour);
+            this.logger.log(`[${this.mod}] Set [${typeQuest.name}] Trader [fence] Quest Types to: [${typeQuest.traderWhitelist[0].questTypes}]. `, "cyan");
         }
     }
 
-    private setDynamicQuestType(typeQuest, typeOfQuest, colour: string)
+    private setDynamicQuestType(typeQuest, typeOfQuest)
     {
         typeQuest.types = typeOfQuest;
 
@@ -221,19 +233,19 @@ class RQC implements IPreAkiLoadMod, IPostDBLoadMod
             typeQuest.traderWhitelist[i].questTypes = typeOfQuest;
             if (RQC.config.debugLogging)
             {
-                this.logger.log(`[${this.mod}] Set [${typeQuest.name}] Trader [${typeQuest.traderWhitelist[i].name}] Quest Types to: [${typeQuest.traderWhitelist[i].questTypes}]. `, colour);
+                this.logger.log(`[${this.mod}] Set [${typeQuest.name}] Trader [${typeQuest.traderWhitelist[i].name}] Quest Types to: [${typeQuest.traderWhitelist[i].questTypes}]. `, "cyan");
             }
         }
     }
 
-    private setDynamicFenceType(typeQuest, typeOfQuest, colour: string)
+    private setDynamicFenceType(typeQuest, typeOfQuest)
     {
         typeQuest.types = typeOfQuest;
         
         typeQuest.traderWhitelist[0].questTypes = typeOfQuest;           
         if (RQC.config.debugLogging)
         {
-            this.logger.log(`[${this.mod}] Set [${typeQuest.name}] Trader [fence] Quest Types to: [${typeQuest.traderWhitelist[0].questTypes}]. `, colour);
+            this.logger.log(`[${this.mod}] Set [${typeQuest.name}] Trader [fence] Quest Types to: [${typeQuest.traderWhitelist[0].questTypes}]. `, "cyan");
         }
     }
 
@@ -256,15 +268,18 @@ class RQC implements IPreAkiLoadMod, IPostDBLoadMod
         }
         if (typeCheck.every((i)=> !i) || typeCheckSize != typeCheckCounter)
         {
-                    
             if (RQC.config.debugLogging)
             {
-                this.logger.log(`[${this.mod}] Validation Failed for: [${typeString}]. Invalid config file.`, "red");
+                this.logger.log(`[${this.mod}] Validation Failed for: [${typeString}]. Invalid config file!`, "red");
             }
             return false;
         }
         else
         {
+            if (RQC.config.debugLogging)
+            {
+                this.logger.log(`[${this.mod}] Validation Passed for: [${typeString}]. Valid config file!`, "cyan");
+            }
             return true;
         }
     }
@@ -272,16 +287,28 @@ class RQC implements IPreAkiLoadMod, IPostDBLoadMod
     private setXPMultiplier(typeQuest, xpMultiplier)
     {
         typeQuest.rewardScaling.experience = typeQuest.rewardScaling.experience.map((xp) => Math.round(xp * xpMultiplier));
+        if (RQC.config.debugLogging)
+        {
+            this.logger.log(`[${this.mod}] XP Multiplier Set for: [${typeQuest.name}].`, "cyan");
+        }
     }
 
     private setCurrencyMultiplier(typeQuest, currencyMultiplier)
     {
         typeQuest.rewardScaling.roubles = typeQuest.rewardScaling.roubles.map((cur) => Math.round(cur * currencyMultiplier));
+        if (RQC.config.debugLogging)
+        {
+            this.logger.log(`[${this.mod}] Currency Multiplier Set for: [${typeQuest.name}].`, "cyan");
+        }
     }
 
     private setRepMultiplier(typeQuest, repMultiplier)
     {
         typeQuest.rewardScaling.reputation = typeQuest.rewardScaling.reputation.map((cur) => Math.round(cur * repMultiplier));
+        if (RQC.config.debugLogging)
+        {
+            this.logger.log(`[${this.mod}] Reputation Multiplier Set for: [${typeQuest.name}].`, "cyan");
+        }
     }
 }
 
