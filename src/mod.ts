@@ -10,9 +10,10 @@ import { IDatabaseTables } from "@spt-aki/models/spt/server/IDatabaseTables";
 import { ConfigServer } from "@spt-aki/servers/ConfigServer";
 import { ConfigTypes } from "@spt-aki/models/enums/ConfigTypes";
 import { JsonUtil } from "@spt-aki/utils/JsonUtil";
+import { RandomUtil } from "@spt-aki/utils/RandomUtil";
+import { MathUtil } from "@spt-aki/utils/MathUtil";
 import * as fs from "node:fs";
 import * as path from "node:path";
-
 
 class RQC implements IPreAkiLoadMod, IPostDBLoadMod
 {
@@ -50,33 +51,36 @@ class RQC implements IPreAkiLoadMod, IPostDBLoadMod
 
         // Resolve SPT classes we'll use
         const logger = container.resolve<ILogger>("WinstonLogger");
-        
+
         const configServer = container.resolve<ConfigServer>("ConfigServer");
         const questConfig = configServer.getConfig(ConfigTypes.QUEST);
         const repeatableQuests = questConfig["repeatableQuests"];
-        const dailyQuest = repeatableQuests[0]
+        const dailyQuest = repeatableQuests[0];
         const weeklyQuest = repeatableQuests[1];
         const scavQuest = repeatableQuests[2];
+        
 
         if (RQC.config.useStaticType)
         {
-            const typeOfQuest = this.getStaticConfigType();
-            logger.log(`[${this.mod}] ConfigType ${typeOfQuest}.`, "yellow");
+            //Set Static Types
+            const typeOfQuest:string = this.getStaticConfigType();
+            logger.log(`[${this.mod}] Setting Repeatable Quests Type: ${typeOfQuest}.`, "yellow");
             this.setStaticQuestType(dailyQuest, typeOfQuest, "green");
-            this.setStaticQuestType(weeklyQuest, typeOfQuest, "cyan");
-            
-            //Set Scav Type
-            scavQuest.traderWhitelist[0].questTypes = [RQC.config.scavQuestType];
-            this.logger.log(`[${this.mod}] Trader [fence] Set Quest Type: [${typeOfQuest}]. `, "green");
+            this.setStaticQuestType(weeklyQuest, typeOfQuest, "green");
+            this.setStaticFenceType(scavQuest, typeOfQuest, "green");
+        } 
+        else
+        {
+            logger.log(`[${this.mod}] [Config] useStaticType = false. No changes made to Repeatable Quest generation.`, "red");
         }
 
         this.logger.debug(`[${this.mod}] loaded... `);
 
         const timeTaken = performance.now() - start;
-        logger.log(`[${this.mod}] Configuration took ${timeTaken.toFixed(3)}ms.`, "green");
+        logger.log(`[${this.mod}] Configuration took ${timeTaken.toFixed(3)}ms.`, "yellow");
     }
 
-    private getStaticConfigType() : string
+    private getStaticConfigType()
     {
         if (RQC.config.completionOnly)
         {
@@ -94,10 +98,26 @@ class RQC implements IPreAkiLoadMod, IPostDBLoadMod
 
     private setStaticQuestType(typeQuest, typeOfQuest: string, colour: string)
     {
+        typeQuest.types = [typeOfQuest];
+
         for (let i = 0; i <= 6; i++)
         {
             typeQuest.traderWhitelist[i].questTypes = [typeOfQuest];
-            this.logger.log(`[${this.mod}] Trader [${typeQuest.traderWhitelist[i].name}] Set Quest Type: [${typeOfQuest}]. `, colour);
+            if (RQC.config.debugLogging)
+            {
+                this.logger.log(`[${this.mod}] Set [${typeQuest.name}] Trader [${typeQuest.traderWhitelist[i].name}] Quest Types to: [${typeQuest.traderWhitelist[i].questTypes}]. `, colour);
+            }
+        }
+    }
+
+    private setStaticFenceType(typeQuest, typeOfQuest: string, colour: string)
+    {
+        typeQuest.types = [typeOfQuest];
+
+        typeQuest.traderWhitelist[0].questTypes = [typeOfQuest];           
+        if (RQC.config.debugLogging)
+        {
+        this.logger.log(`[${this.mod}] Set [${typeQuest.name}] Trader [fence] Quest Types to: [${typeQuest.traderWhitelist[0].questTypes}]. `, colour);
         }
     }
 }
@@ -108,7 +128,7 @@ interface Config
     completionOnly: boolean,
     explorationOnly: boolean,
     eliminationOnly: boolean,
-    scavQuestType: string,
+    debugLogging: boolean,
 }
 
 module.exports = { mod: new RQC() }

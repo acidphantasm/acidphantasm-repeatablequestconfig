@@ -1,8 +1,8 @@
 {
     "useStaticType": true,
     "completionOnly": false,
-    "explorationOnly": true,
-    "eliminationOnly": false,
+    "explorationOnly": false,
+    "eliminationOnly": true,
 
-    "scavQuestType": "Elimination"
+    "debugLogging": false
 }
