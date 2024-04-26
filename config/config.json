@@ -1,7 +1,9 @@
 {
-    "xpMultiplier": 1,
-    "currencyMultiplier": 1,
-    "repMultiplier": 1,
+    "xpMultiplier": 5,
+    "currencyMultiplier": 5,
+    "repMultiplier": 4,
+    "skillRewardChanceMultiplier": 5,
+    "skillPointRewardMultiplier": 5,
 
     "useStaticType": true,
     "completionOnly": false,
@@ -24,5 +26,5 @@
         "Completion"
     ],
 
-    "debugLogging": false
+    "debugLogging": true
 }

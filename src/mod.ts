@@ -66,7 +66,7 @@ class RQC implements IPreAkiLoadMod, IPostDBLoadMod
             {
                 if (RQC.config.debugLogging)
                 {
-                    logger.log(`[${this.mod}] Setting Repeatable Quests Type: ${typeOfQuest}.`, "yellow");
+                    logger.log(`[${this.mod}] Setting Repeatable Quests Type: ${typeOfQuest}.`, "magenta");
                 }
                 this.setStaticQuestType(dailyQuest, typeOfQuest);
                 this.setStaticQuestType(weeklyQuest, typeOfQuest);
@@ -87,9 +87,9 @@ class RQC implements IPreAkiLoadMod, IPostDBLoadMod
             {
                 if (RQC.config.debugLogging)
                 {
-                    logger.log(`[${this.mod}] Setting Daily Repeatable Quests Type: ${dailyType}.`, "yellow");
-                    logger.log(`[${this.mod}] Setting Weekly Repeatable Quests Type: ${weeklyType}.`, "yellow");
-                    logger.log(`[${this.mod}] Setting Scav Repeatable Quests Type: ${scavType}.`, "yellow");
+                    logger.log(`[${this.mod}] Setting Daily Repeatable Quests Type: ${dailyType}.`, "magenta");
+                    logger.log(`[${this.mod}] Setting Weekly Repeatable Quests Type: ${weeklyType}.`, "magenta");
+                    logger.log(`[${this.mod}] Setting Scav Repeatable Quests Type: ${scavType}.`, "magenta");
                 }
                 this.setDynamicQuestType(dailyQuest, dailyType);
                 this.setDynamicQuestType(weeklyQuest, weeklyType);
@@ -126,6 +126,26 @@ class RQC implements IPreAkiLoadMod, IPostDBLoadMod
         else
         {
             logger.log(`[${this.mod}] Unable to set Reputation Multiplier. Must be 0.01 - 5.`, "red");
+        }
+        if (RQC.config.skillRewardChanceMultiplier >= 0.01 && RQC.config.skillRewardChanceMultiplier <= 5)
+        {
+            this.setSkillRewardMultiplier(dailyQuest, RQC.config.skillRewardChanceMultiplier);
+            this.setSkillRewardMultiplier(weeklyQuest, RQC.config.skillRewardChanceMultiplier);
+            this.setSkillRewardMultiplier(scavQuest, RQC.config.skillRewardChanceMultiplier);
+        }
+        else
+        {
+            logger.log(`[${this.mod}] Unable to set Skill Reward Chance Multiplier. Must be 0.01 - 5.`, "red");
+        }
+        if (RQC.config.skillPointRewardMultiplier >= 0.01 && RQC.config.skillPointRewardMultiplier <= 5)
+        {
+            this.setSkillPointRewardMultiplier(dailyQuest, RQC.config.skillPointRewardMultiplier);
+            this.setSkillPointRewardMultiplier(weeklyQuest, RQC.config.skillPointRewardMultiplier);
+            this.setSkillPointRewardMultiplier(scavQuest, RQC.config.skillPointRewardMultiplier);
+        }
+        else
+        {
+            logger.log(`[${this.mod}] Unable to set Skill Point Reward Multiplier. Must be 0.01 - 5.`, "red");
         }
 
         this.logger.debug(`[${this.mod}] loaded... `);
@@ -208,7 +228,7 @@ class RQC implements IPreAkiLoadMod, IPostDBLoadMod
             typeQuest.traderWhitelist[i].questTypes = [typeOfQuest];
             if (RQC.config.debugLogging)
             {
-                this.logger.log(`[${this.mod}] Set [${typeQuest.name}] Trader [${typeQuest.traderWhitelist[i].name}] Quest Types to: [${typeQuest.traderWhitelist[i].questTypes}]. `, "cyan");
+                this.logger.log(`[${this.mod}] Set [${typeQuest.name}] Trader [${typeQuest.traderWhitelist[i].name}] Quest Types to: [${typeQuest.traderWhitelist[i].questTypes}]. `, "yellow");
             }
         }
     }
@@ -220,7 +240,7 @@ class RQC implements IPreAkiLoadMod, IPostDBLoadMod
         typeQuest.traderWhitelist[0].questTypes = [typeOfQuest];           
         if (RQC.config.debugLogging)
         {
-            this.logger.log(`[${this.mod}] Set [${typeQuest.name}] Trader [fence] Quest Types to: [${typeQuest.traderWhitelist[0].questTypes}]. `, "cyan");
+            this.logger.log(`[${this.mod}] Set [${typeQuest.name}] Trader [fence] Quest Types to: [${typeQuest.traderWhitelist[0].questTypes}]. `, "yellow");
         }
     }
 
@@ -233,7 +253,7 @@ class RQC implements IPreAkiLoadMod, IPostDBLoadMod
             typeQuest.traderWhitelist[i].questTypes = typeOfQuest;
             if (RQC.config.debugLogging)
             {
-                this.logger.log(`[${this.mod}] Set [${typeQuest.name}] Trader [${typeQuest.traderWhitelist[i].name}] Quest Types to: [${typeQuest.traderWhitelist[i].questTypes}]. `, "cyan");
+                this.logger.log(`[${this.mod}] Set [${typeQuest.name}] Trader [${typeQuest.traderWhitelist[i].name}] Quest Types to: [${typeQuest.traderWhitelist[i].questTypes}]. `, "yellow");
             }
         }
     }
@@ -245,7 +265,7 @@ class RQC implements IPreAkiLoadMod, IPostDBLoadMod
         typeQuest.traderWhitelist[0].questTypes = typeOfQuest;           
         if (RQC.config.debugLogging)
         {
-            this.logger.log(`[${this.mod}] Set [${typeQuest.name}] Trader [fence] Quest Types to: [${typeQuest.traderWhitelist[0].questTypes}]. `, "cyan");
+            this.logger.log(`[${this.mod}] Set [${typeQuest.name}] Trader [fence] Quest Types to: [${typeQuest.traderWhitelist[0].questTypes}]. `, "yellow");
         }
     }
 
@@ -278,7 +298,7 @@ class RQC implements IPreAkiLoadMod, IPostDBLoadMod
         {
             if (RQC.config.debugLogging)
             {
-                this.logger.log(`[${this.mod}] Validation Passed for: [${typeString}]. Valid config file!`, "cyan");
+                this.logger.log(`[${this.mod}] Validation Passed for: [${typeString}]. Valid config file!`, "green");
             }
             return true;
         }
@@ -289,7 +309,7 @@ class RQC implements IPreAkiLoadMod, IPostDBLoadMod
         typeQuest.rewardScaling.experience = typeQuest.rewardScaling.experience.map((xp) => Math.round(xp * xpMultiplier));
         if (RQC.config.debugLogging)
         {
-            this.logger.log(`[${this.mod}] XP Multiplier Set for: [${typeQuest.name}].`, "cyan");
+            this.logger.log(`[${this.mod}] XP Multiplier Set for: [${typeQuest.name}]. Array: [${typeQuest.rewardScaling.experience}]`, "cyan");
         }
     }
 
@@ -298,16 +318,34 @@ class RQC implements IPreAkiLoadMod, IPostDBLoadMod
         typeQuest.rewardScaling.roubles = typeQuest.rewardScaling.roubles.map((cur) => Math.round(cur * currencyMultiplier));
         if (RQC.config.debugLogging)
         {
-            this.logger.log(`[${this.mod}] Currency Multiplier Set for: [${typeQuest.name}].`, "cyan");
+            this.logger.log(`[${this.mod}] Currency Multiplier Set for: [${typeQuest.name}]. Array: [${typeQuest.rewardScaling.roubles}]`, "cyan");
         }
     }
 
     private setRepMultiplier(typeQuest, repMultiplier)
     {
-        typeQuest.rewardScaling.reputation = typeQuest.rewardScaling.reputation.map((cur) => Math.round(cur * repMultiplier).toFixed(2));
+        typeQuest.rewardScaling.reputation = typeQuest.rewardScaling.reputation.map((rep) => rep * repMultiplier);
         if (RQC.config.debugLogging)
         {
-            this.logger.log(`[${this.mod}] Reputation Multiplier Set for: [${typeQuest.name}].`, "cyan");
+            this.logger.log(`[${this.mod}] Reputation Multiplier Set for: [${typeQuest.name}]. Array: [${typeQuest.rewardScaling.reputation}]`, "cyan");
+        }
+    }
+
+    private setSkillRewardMultiplier(typeQuest, skillRewardMultiplier)
+    {
+        typeQuest.rewardScaling.skillRewardChance = typeQuest.rewardScaling.skillRewardChance.map((chance) => chance * skillRewardMultiplier);
+        if (RQC.config.debugLogging)
+        {
+            this.logger.log(`[${this.mod}] Skill Reward Chance Multiplier Set for: [${typeQuest.name}]. Array: [${typeQuest.rewardScaling.skillRewardChance}]`, "cyan");
+        }
+    }
+
+    private setSkillPointRewardMultiplier(typeQuest, skillPointRewardMultiplier)
+    {
+        typeQuest.rewardScaling.skillPointReward = typeQuest.rewardScaling.skillPointReward.map((chance) => chance * skillPointRewardMultiplier);
+        if (RQC.config.debugLogging)
+        {
+            this.logger.log(`[${this.mod}] Skill Point Reward Multiplier Set for: [${typeQuest.name}]. Array: [${typeQuest.rewardScaling.skillPointReward}]`, "cyan");
         }
     }
 }
@@ -317,6 +355,8 @@ interface Config
     xpMultiplier: number,
     currencyMultiplier: number,
     repMultiplier: number,
+    skillRewardChanceMultiplier: number,
+    skillPointRewardMultiplier: number,
     useStaticType: boolean,
     completionOnly: boolean,
     explorationOnly: boolean,
