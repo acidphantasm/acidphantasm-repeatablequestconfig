@@ -304,7 +304,7 @@ class RQC implements IPreAkiLoadMod, IPostDBLoadMod
 
     private setRepMultiplier(typeQuest, repMultiplier)
     {
-        typeQuest.rewardScaling.reputation = typeQuest.rewardScaling.reputation.map((cur) => Math.round(cur * repMultiplier));
+        typeQuest.rewardScaling.reputation = typeQuest.rewardScaling.reputation.map((cur) => Math.round(cur * repMultiplier).toFixed(2));
         if (RQC.config.debugLogging)
         {
             this.logger.log(`[${this.mod}] Reputation Multiplier Set for: [${typeQuest.name}].`, "cyan");
