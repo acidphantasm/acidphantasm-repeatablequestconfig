@@ -229,7 +229,16 @@ class RQC implements IPreAkiLoadMod, IPostDBLoadMod
 
         for (let i = 0; i <= 6; i++)
         {
-            typeQuest.traderWhitelist[i].questTypes = [typeOfQuest];
+            if (i == 4 && typeOfQuest == "Elimination")
+            {
+                typeQuest.traderWhitelist[i].questTypes = [];
+                this.logger.log(`[${this.mod}] Skipping [${typeQuest.name}] Trader [${typeQuest.traderWhitelist[i].name}] - No Locale.  Quest Types to: [${typeQuest.traderWhitelist[i].questTypes}]`, "red");
+                continue;
+            }
+            else
+            {
+                typeQuest.traderWhitelist[i].questTypes = [typeOfQuest];
+            }
             if (RQC.config.debugLogging)
             {
                 this.logger.log(`[${this.mod}] Set [${typeQuest.name}] Trader [${typeQuest.traderWhitelist[i].name}] Quest Types to: [${typeQuest.traderWhitelist[i].questTypes}]. `, "yellow");
@@ -254,7 +263,26 @@ class RQC implements IPreAkiLoadMod, IPostDBLoadMod
 
         for (let i = 0; i <= 6; i++)
         {
-            typeQuest.traderWhitelist[i].questTypes = typeOfQuest;
+            if (i == 4 && typeOfQuest.includes("Elimination"))
+            {
+                this.logger.log(`[${this.mod}] Fixing Quest Array: [${typeOfQuest}]. `, "red");
+                let tempTypeOfQuest = [...typeOfQuest];
+                const elimIndex = tempTypeOfQuest.indexOf("Elimination");
+                tempTypeOfQuest.splice(elimIndex, 1);
+                this.logger.log(`[${this.mod}] New Quest Array: [${tempTypeOfQuest}]. `, "red");
+                this.logger.log(`[${this.mod}] Continuing Quest Array: [${typeOfQuest}]. `, "red");
+                typeQuest.traderWhitelist[i].questTypes = tempTypeOfQuest;
+                
+                if (RQC.config.debugLogging)
+                {
+                    this.logger.log(`[${this.mod}] Set [${typeQuest.name}] Trader [${typeQuest.traderWhitelist[i].name}] Quest Types to: [${typeQuest.traderWhitelist[i].questTypes}]. `, "yellow");
+                }
+                continue;
+            }
+            else
+            {
+                typeQuest.traderWhitelist[i].questTypes = typeOfQuest;
+            }
             if (RQC.config.debugLogging)
             {
                 this.logger.log(`[${this.mod}] Set [${typeQuest.name}] Trader [${typeQuest.traderWhitelist[i].name}] Quest Types to: [${typeQuest.traderWhitelist[i].questTypes}]. `, "yellow");

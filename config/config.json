@@ -5,21 +5,17 @@
     "skillRewardChanceMultiplier": 1,
     "skillPointRewardMultiplier": 1,
 
-    "useSpecificQuestType": true,
+    "useSpecificQuestType": false,
     "completionOnly": false,
     "explorationOnly": false,
     "eliminationOnly": true,
 
-    "useRandomQuestType": false,
+    "useRandomQuestType": true,
     "dailyTypes": [
-        "Exploration",
-        "Elimination",
-        "Completion"
+        "Elimination"
     ],
     "weeklyTypes": [
-        "Exploration",
-        "Elimination",
-        "Completion"
+        "Elimination"
     ],
     "scavTypes": [
         "Exploration",
@@ -27,5 +23,5 @@
         "Completion"
     ],
 
-    "debugLogging": false
+    "debugLogging": true
 }
