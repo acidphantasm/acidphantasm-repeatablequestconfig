@@ -265,12 +265,9 @@ class RQC implements IPreAkiLoadMod, IPostDBLoadMod
         {
             if (i == 4 && typeOfQuest.includes("Elimination"))
             {
-                this.logger.log(`[${this.mod}] Fixing Quest Array: [${typeOfQuest}]. `, "red");
-                let tempTypeOfQuest = [...typeOfQuest];
+                const tempTypeOfQuest = [...typeOfQuest];
                 const elimIndex = tempTypeOfQuest.indexOf("Elimination");
                 tempTypeOfQuest.splice(elimIndex, 1);
-                this.logger.log(`[${this.mod}] New Quest Array: [${tempTypeOfQuest}]. `, "red");
-                this.logger.log(`[${this.mod}] Continuing Quest Array: [${typeOfQuest}]. `, "red");
                 typeQuest.traderWhitelist[i].questTypes = tempTypeOfQuest;
                 
                 if (RQC.config.debugLogging)
