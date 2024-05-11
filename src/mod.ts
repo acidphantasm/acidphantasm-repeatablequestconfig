@@ -232,7 +232,10 @@ class RQC implements IPreAkiLoadMod, IPostDBLoadMod
             if (i == 4 && typeOfQuest == "Elimination")
             {
                 typeQuest.traderWhitelist[i].questTypes = [];
-                this.logger.log(`[${this.mod}] Skipping [${typeQuest.name}] Trader [${typeQuest.traderWhitelist[i].name}] - No Locale.  Quest Types to: [${typeQuest.traderWhitelist[i].questTypes}]`, "red");
+                if (RQC.config.debugLogging)
+                {
+                    this.logger.log(`[${this.mod}] Skipping [${typeQuest.name}] Trader [${typeQuest.traderWhitelist[i].name}] - No Locale.  Quest Types to: [${typeQuest.traderWhitelist[i].questTypes}]`, "red");
+                }
                 continue;
             }
             else
