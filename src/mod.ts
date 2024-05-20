@@ -164,63 +164,48 @@ class RQC implements IPreAkiLoadMod, IPostDBLoadMod
         {
             return ("Completion");
         }
-        else if (RQC.config.explorationOnly)
+        if (RQC.config.explorationOnly)
         {
             return ("Exploration");
         }
-        else if (RQC.config.eliminationOnly)
+        if (RQC.config.eliminationOnly)
         {
             return ("Elimination");
         }
-        else
-        {
-            return null;
-        }
+        return null;
     }
 
     private getDynamicConfigType(i: number, typeString)
     {
         let validationCheck:boolean = null;
-        if (i == 0)
+        if (i === 0)
         {
             validationCheck = this.validateDynamicArray(RQC.config.dailyTypes, typeString);
             if (validationCheck)
             {
                 return (RQC.config.dailyTypes);
             }
-            else
-            {
-                return null;
-            }
+            return null;
         }
-        else if (i == 1)
+        if (i === 1)
         {
             validationCheck = this.validateDynamicArray(RQC.config.weeklyTypes, typeString);
             if (validationCheck)
             {
                 return (RQC.config.weeklyTypes);
             }
-            else
-            {
-                return null;
-            }
+            return null;
         }            
-        else if (i == 2)
+        if (i === 2)
         {
             validationCheck = this.validateDynamicArray(RQC.config.scavTypes, typeString);
             if (validationCheck)
             {
                 return (RQC.config.scavTypes);
             }
-            else
-            {
-                return null;
-            }
-        }
-        else 
-        {
             return null;
         }
+        return null;
     }
 
     private setStaticQuestType(typeQuest, typeOfQuest)
@@ -229,7 +214,7 @@ class RQC implements IPreAkiLoadMod, IPostDBLoadMod
 
         for (let i = 0; i <= 6; i++)
         {
-            if (i == 4 && typeOfQuest == "Elimination")
+            if (i === 4 && typeOfQuest === "Elimination")
             {
                 typeQuest.traderWhitelist[i].questTypes = [];
                 if (RQC.config.debugLogging)
@@ -238,10 +223,7 @@ class RQC implements IPreAkiLoadMod, IPostDBLoadMod
                 }
                 continue;
             }
-            else
-            {
-                typeQuest.traderWhitelist[i].questTypes = [typeOfQuest];
-            }
+            typeQuest.traderWhitelist[i].questTypes = [typeOfQuest];
             if (RQC.config.debugLogging)
             {
                 this.logger.log(`[${this.mod}] Set [${typeQuest.name}] Trader [${typeQuest.traderWhitelist[i].name}] Quest Types to: [${typeQuest.traderWhitelist[i].questTypes}]. `, "yellow");
@@ -266,7 +248,7 @@ class RQC implements IPreAkiLoadMod, IPostDBLoadMod
 
         for (let i = 0; i <= 6; i++)
         {
-            if (i == 4 && typeOfQuest.includes("Elimination"))
+            if (i === 4 && typeOfQuest.includes("Elimination"))
             {
                 const tempTypeOfQuest = [...typeOfQuest];
                 const elimIndex = tempTypeOfQuest.indexOf("Elimination");
@@ -279,10 +261,7 @@ class RQC implements IPreAkiLoadMod, IPostDBLoadMod
                 }
                 continue;
             }
-            else
-            {
-                typeQuest.traderWhitelist[i].questTypes = typeOfQuest;
-            }
+            typeQuest.traderWhitelist[i].questTypes = typeOfQuest;
             if (RQC.config.debugLogging)
             {
                 this.logger.log(`[${this.mod}] Set [${typeQuest.name}] Trader [${typeQuest.traderWhitelist[i].name}] Quest Types to: [${typeQuest.traderWhitelist[i].questTypes}]. `, "yellow");
@@ -318,19 +297,16 @@ class RQC implements IPreAkiLoadMod, IPostDBLoadMod
         {
             ++typeCheckCounter;
         }
-        if (typeCheck.every((i)=> !i) || typeCheckSize != typeCheckCounter)
+        if (typeCheck.every((i)=> !i) || typeCheckSize !== typeCheckCounter)
         {
             this.logger.error(`[${this.mod}] [ERROR] Validation Failed for: [${typeString}]. Invalid config setting!`);
             return false;
         }
-        else
+        if (RQC.config.debugLogging)
         {
-            if (RQC.config.debugLogging)
-            {
-                this.logger.log(`[${this.mod}] Validation Passed for: [${typeString}]. Valid config setting!`, "green");
-            }
-            return true;
+            this.logger.log(`[${this.mod}] Validation Passed for: [${typeString}]. Valid config setting!`, "green");
         }
+        return true;
     }
 
     private setXPMultiplier(typeQuest, xpMultiplier)
