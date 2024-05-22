@@ -1,6 +1,6 @@
-/dist
-/node_modules
-/types
+/server mod/dist
+/server mod/node_modules
+/server mod/types
 .buildignore
 .eslintignore
 .eslintrc.json
