@@ -43,6 +43,21 @@ class RQC implements IPreAkiLoadMod, IPostDBLoadMod
         const dailyQuest = repeatableQuests[0];
         const weeklyQuest = repeatableQuests[1];
         const scavQuest = repeatableQuests[2];
+
+        dailyQuest.numQuests = 100;
+        dailyQuest.minPlayerLevel = 1;
+        dailyQuest.resetTime = 86400;
+        logger.log(`[${this.mod}] Daily numQuests: ${dailyQuest.numQuests} Daily minPlayerLevel: ${dailyQuest.minPlayerLevel} Daily resetTime: ${dailyQuest.resetTime}.`, "magenta");
+
+        weeklyQuest.numQuests = 100;
+        weeklyQuest.minPlayerLevel = 1;
+        weeklyQuest.resetTime = 604800;
+        logger.log(`[${this.mod}] Weekly numQuests: ${weeklyQuest.numQuests} Weekly minPlayerLevel: ${weeklyQuest.minPlayerLevel} Weekly resetTime: ${weeklyQuest.resetTime}.`, "magenta");
+
+        scavQuest.numQuests = 100;
+        scavQuest.minPlayerLevel = 1;
+        scavQuest.resetTime = 86400;
+        logger.log(`[${this.mod}] Fence numQuests: ${scavQuest.numQuests} Fence minPlayerLevel: ${scavQuest.minPlayerLevel} Fence resetTime: ${scavQuest.resetTime}.`, "magenta");
         
         if (RQC.config.useSpecificQuestType && !RQC.config.useRandomQuestType)
         {
