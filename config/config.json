@@ -5,6 +5,10 @@
     "skillRewardChanceMultiplier": 1,
     "skillPointRewardMultiplier": 1,
 
+    "dailyMinPlayerLevel": 5,
+    "weeklyMinPlayerLevel": 15,
+    "fenceMinPlayerLevel": 5,
+
     "useSpecificQuestType": true,
     "completionOnly": false,
     "explorationOnly": false,
@@ -21,7 +25,7 @@
         "Elimination",
         "Completion"
     ],
-    "scavTypes": [
+    "fenceTypes": [
         "Exploration",
         "Elimination",
         "Completion"
