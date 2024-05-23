@@ -44,7 +44,7 @@ By default, without changing anything the ONLY thing that changes is all new Rep
 - useRandomQuestType
   - Default: false
     - Only ONE of useSpecificQuestType or useRandomQuestType can be true.
-    - Setting this true will enforce each quest type (Daily/Weekly/Scav) to be restricted to the options configured below.
+    - Setting this true will enforce each quest type (Daily/Weekly/Fence) to be restricted to the options configured below.
     - All below values are the same as vanilla SPT.
 - dailyTypes
   - Default: "Exploration", "Elimination", "Completion"
@@ -54,9 +54,9 @@ By default, without changing anything the ONLY thing that changes is all new Rep
   - Default: "Exploration", "Elimination", "Completion"
     - Remove one of the options to remove it from the available pool of quests for all Weekly quests.
     - ENSURE that you are following the proper JSON format that is already in the config file. If you fail to do so, the server console will give you an error and not apply any changes.
-- scavTypes
+- fenceTypes
   - Default: "Exploration", "Elimination", "Completion"
-    - Remove one of the options to remove it from the available pool of quests for all Scav quests.
+    - Remove one of the options to remove it from the available pool of quests for all fence quests.
     - ENSURE that you are following the proper JSON format that is already in the config file. If you fail to do so, the server console will give you an error and not apply any changes.
 ### Debug
 - debugLogging
