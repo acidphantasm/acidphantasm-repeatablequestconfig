@@ -5,14 +5,14 @@
     "skillRewardChanceMultiplier": 1,
     "skillPointRewardMultiplier": 1,
 
-    "dailyMinPlayerLevel": 1,
-    "dailyNumberOfQuests": 10,
+    "dailyMinPlayerLevel": 5,
+    "dailyNumberOfQuests": 3,
 
-    "weeklyMinPlayerLevel": 1,
-    "weeklyNumberOfQuests": 10,
+    "weeklyMinPlayerLevel": 15,
+    "weeklyNumberOfQuests": 1,
 
     "fenceMinPlayerLevel": 1,
-    "fenceNumberOfQuests": 10,
+    "fenceNumberOfQuests": 1,
 
 
     "useSpecificQuestType": true,
@@ -37,5 +37,5 @@
         "Completion"
     ],
 
-    "debugLogging": true
+    "debugLogging": false
 }
