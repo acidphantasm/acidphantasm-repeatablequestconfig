@@ -160,7 +160,7 @@ class RQC implements IPreAkiLoadMod, IPostDBLoadMod
             {
                 logger.log(`[${this.mod}] Setting Daily Repeatable Quests minPlayerLevel: ${RQC.config.dailyMinPlayerLevel}.`, "magenta");
                 logger.log(`[${this.mod}] Setting Weekly Repeatable Quests minPlayerLevel: ${RQC.config.weeklyMinPlayerLevel}.`, "magenta");
-                logger.log(`[${this.mod}] Setting fence Repeatable Quests minPlayerLevel: ${RQC.config.fenceMinPlayerLevel}.`, "magenta");
+                logger.log(`[${this.mod}] Setting Fence Repeatable Quests minPlayerLevel: ${RQC.config.fenceMinPlayerLevel}.`, "magenta");
             }
             this.setMinPlayerLevel(dailyQuest, RQC.config.dailyMinPlayerLevel);
             this.setMinPlayerLevel(weeklyQuest, RQC.config.weeklyMinPlayerLevel);
@@ -169,6 +169,26 @@ class RQC implements IPreAkiLoadMod, IPostDBLoadMod
         else
         {
             logger.error(`[${this.mod}] [ERROR] Unable to set minPlayerLevel. Must be equal to or greater than 1. Value out of acceptable range.`);
+        }
+
+        //Set Number of Repeatable Quests -- Refactor this code later to be cleaner.
+        if (RQC.config.dailyNumberOfQuests >= 1 && RQC.config.dailyNumberOfQuests <= 15 && 
+            RQC.config.weeklyNumberOfQuests >= 1 && RQC.config.weeklyNumberOfQuests <= 15 &&
+            RQC.config.fenceNumberOfQuests >= 1 && RQC.config.fenceNumberOfQuests <= 15)
+        {
+            if (RQC.config.debugLogging)
+            {
+                logger.log(`[${this.mod}] Setting Number of Daily Repeatable Quests: ${RQC.config.dailyNumberOfQuests}.`, "magenta");
+                logger.log(`[${this.mod}] Setting Number of Weekly Repeatable Quests : ${RQC.config.weeklyNumberOfQuests}.`, "magenta");
+                logger.log(`[${this.mod}] Setting Number of Fence Repeatable Quests : ${RQC.config.fenceNumberOfQuests}.`, "magenta");
+            }
+            this.setNumberOfQuests(dailyQuest, RQC.config.dailyNumberOfQuests);
+            this.setNumberOfQuests(weeklyQuest, RQC.config.weeklyNumberOfQuests);
+            this.setNumberOfQuests(fenceQuest, RQC.config.fenceNumberOfQuests);
+        }
+        else
+        {
+            logger.error(`[${this.mod}] [ERROR] Unable to set numberOfQuests. Must be between 1 & 15. Value out of acceptable range.`);
         }
 
         // Send logger to debug saying loaded, and finish up performance timer.
@@ -181,6 +201,11 @@ class RQC implements IPreAkiLoadMod, IPostDBLoadMod
     private setMinPlayerLevel(typeQuest, minPlayerLevel)
     {
         typeQuest.minPlayerLevel = minPlayerLevel;
+    }
+
+    private setNumberOfQuests(typeQuest, numQuests)
+    {
+        typeQuest.numQuests = numQuests;
     }
 
     private getStaticConfigType()
@@ -388,8 +413,11 @@ interface Config
     skillRewardChanceMultiplier: number,
     skillPointRewardMultiplier: number,
     dailyMinPlayerLevel: number,
+    dailyNumberOfQuests: number,
     weeklyMinPlayerLevel: number,
+    weeklyNumberOfQuests: number,
     fenceMinPlayerLevel: number,
+    fenceNumberOfQuests: number,
     useSpecificQuestType: boolean,
     completionOnly: boolean,
     explorationOnly: boolean,
