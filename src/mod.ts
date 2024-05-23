@@ -39,26 +39,11 @@ class RQC implements IPreAkiLoadMod, IPostDBLoadMod
 
         const configServer = container.resolve<ConfigServer>("ConfigServer");
         const questConfig = configServer.getConfig(ConfigTypes.QUEST);
-        const repeatableQuests = questConfig["repeatableQuests"];
+        const repeatableQuests = questConfig.repeatableQuests;
         const dailyQuest = repeatableQuests[0];
         const weeklyQuest = repeatableQuests[1];
-        const scavQuest = repeatableQuests[2];
+        const fenceQuest = repeatableQuests[2];
 
-        dailyQuest.numQuests = 100;
-        dailyQuest.minPlayerLevel = 1;
-        dailyQuest.resetTime = 86400;
-        logger.log(`[${this.mod}] Daily numQuests: ${dailyQuest.numQuests} Daily minPlayerLevel: ${dailyQuest.minPlayerLevel} Daily resetTime: ${dailyQuest.resetTime}.`, "magenta");
-
-        weeklyQuest.numQuests = 100;
-        weeklyQuest.minPlayerLevel = 1;
-        weeklyQuest.resetTime = 604800;
-        logger.log(`[${this.mod}] Weekly numQuests: ${weeklyQuest.numQuests} Weekly minPlayerLevel: ${weeklyQuest.minPlayerLevel} Weekly resetTime: ${weeklyQuest.resetTime}.`, "magenta");
-
-        scavQuest.numQuests = 100;
-        scavQuest.minPlayerLevel = 1;
-        scavQuest.resetTime = 86400;
-        logger.log(`[${this.mod}] Fence numQuests: ${scavQuest.numQuests} Fence minPlayerLevel: ${scavQuest.minPlayerLevel} Fence resetTime: ${scavQuest.resetTime}.`, "magenta");
-        
         if (RQC.config.useSpecificQuestType && !RQC.config.useRandomQuestType)
         {
             //Set Static Types
@@ -75,7 +60,7 @@ class RQC implements IPreAkiLoadMod, IPostDBLoadMod
                 }
                 this.setStaticQuestType(dailyQuest, typeOfQuest);
                 this.setStaticQuestType(weeklyQuest, typeOfQuest);
-                this.setStaticFenceType(scavQuest, typeOfQuest);
+                this.setStaticFenceType(fenceQuest, typeOfQuest);
             }
         } 
         else if (RQC.config.useRandomQuestType && !RQC.config.useSpecificQuestType)
@@ -83,8 +68,8 @@ class RQC implements IPreAkiLoadMod, IPostDBLoadMod
             //Set Dynamic Types
             const dailyType = this.getDynamicConfigType(0, "dailyTypes");
             const weeklyType = this.getDynamicConfigType(1, "weeklyTypes");
-            const scavType = this.getDynamicConfigType(2, "scavTypes");
-            if (dailyType == null || weeklyType == null || scavType == null)
+            const fenceType = this.getDynamicConfigType(2, "fenceTypes");
+            if (dailyType == null || weeklyType == null || fenceType == null)
             {
                 logger.error(`[${this.mod}] [ERROR] Unable to set quest types. See above error for troubleshooting. No changes have been made to any quest types.`);
             } 
@@ -94,11 +79,11 @@ class RQC implements IPreAkiLoadMod, IPostDBLoadMod
                 {
                     logger.log(`[${this.mod}] Setting Daily Repeatable Quests Type: ${dailyType}.`, "magenta");
                     logger.log(`[${this.mod}] Setting Weekly Repeatable Quests Type: ${weeklyType}.`, "magenta");
-                    logger.log(`[${this.mod}] Setting Scav Repeatable Quests Type: ${scavType}.`, "magenta");
+                    logger.log(`[${this.mod}] Setting fence Repeatable Quests Type: ${fenceType}.`, "magenta");
                 }
                 this.setDynamicQuestType(dailyQuest, dailyType);
                 this.setDynamicQuestType(weeklyQuest, weeklyType);
-                this.setDynamicFenceType(scavQuest, scavType);
+                this.setDynamicFenceType(fenceQuest, fenceType);
             }
         }
         else
@@ -111,7 +96,7 @@ class RQC implements IPreAkiLoadMod, IPostDBLoadMod
         {
             this.setXPMultiplier(dailyQuest, RQC.config.xpMultiplier);
             this.setXPMultiplier(weeklyQuest, RQC.config.xpMultiplier);
-            this.setXPMultiplier(scavQuest, RQC.config.xpMultiplier);
+            this.setXPMultiplier(fenceQuest, RQC.config.xpMultiplier);
         }
         else
         {
@@ -123,7 +108,7 @@ class RQC implements IPreAkiLoadMod, IPostDBLoadMod
         {
             this.setCurrencyMultiplier(dailyQuest, RQC.config.currencyMultiplier);
             this.setCurrencyMultiplier(weeklyQuest, RQC.config.currencyMultiplier);
-            this.setCurrencyMultiplier(scavQuest, RQC.config.currencyMultiplier);
+            this.setCurrencyMultiplier(fenceQuest, RQC.config.currencyMultiplier);
         }
         else
         {
@@ -135,7 +120,7 @@ class RQC implements IPreAkiLoadMod, IPostDBLoadMod
         {
             this.setRepMultiplier(dailyQuest, RQC.config.repMultiplier);
             this.setRepMultiplier(weeklyQuest, RQC.config.repMultiplier);
-            this.setRepMultiplier(scavQuest, RQC.config.repMultiplier);
+            this.setRepMultiplier(fenceQuest, RQC.config.repMultiplier);
         }
         else
         {
@@ -147,7 +132,7 @@ class RQC implements IPreAkiLoadMod, IPostDBLoadMod
         {
             this.setSkillRewardMultiplier(dailyQuest, RQC.config.skillRewardChanceMultiplier);
             this.setSkillRewardMultiplier(weeklyQuest, RQC.config.skillRewardChanceMultiplier);
-            this.setSkillRewardMultiplier(scavQuest, RQC.config.skillRewardChanceMultiplier);
+            this.setSkillRewardMultiplier(fenceQuest, RQC.config.skillRewardChanceMultiplier);
         }
         else
         {
@@ -159,11 +144,31 @@ class RQC implements IPreAkiLoadMod, IPostDBLoadMod
         {
             this.setSkillPointRewardMultiplier(dailyQuest, RQC.config.skillPointRewardMultiplier);
             this.setSkillPointRewardMultiplier(weeklyQuest, RQC.config.skillPointRewardMultiplier);
-            this.setSkillPointRewardMultiplier(scavQuest, RQC.config.skillPointRewardMultiplier);
+            this.setSkillPointRewardMultiplier(fenceQuest, RQC.config.skillPointRewardMultiplier);
         }
         else
         {
             logger.error(`[${this.mod}] [ERROR] Unable to set Skill Point Reward Multiplier. Must be 0.01 - 5. Value out of acceptable range.`);
+        }
+
+        //Set Min Player Level for Quests -- Refactor this code later to be cleaner.
+        if (RQC.config.dailyMinPlayerLevel >= 1 && 
+            RQC.config.weeklyMinPlayerLevel >= 1 &&
+            RQC.config.fenceMinPlayerLevel >= 1)
+        {
+            if (RQC.config.debugLogging)
+            {
+                logger.log(`[${this.mod}] Setting Daily Repeatable Quests minPlayerLevel: ${RQC.config.dailyMinPlayerLevel}.`, "magenta");
+                logger.log(`[${this.mod}] Setting Weekly Repeatable Quests minPlayerLevel: ${RQC.config.weeklyMinPlayerLevel}.`, "magenta");
+                logger.log(`[${this.mod}] Setting fence Repeatable Quests minPlayerLevel: ${RQC.config.fenceMinPlayerLevel}.`, "magenta");
+            }
+            this.setMinPlayerLevel(dailyQuest, RQC.config.dailyMinPlayerLevel);
+            this.setMinPlayerLevel(weeklyQuest, RQC.config.weeklyMinPlayerLevel);
+            this.setMinPlayerLevel(fenceQuest, RQC.config.fenceMinPlayerLevel);
+        }
+        else
+        {
+            logger.error(`[${this.mod}] [ERROR] Unable to set minPlayerLevel. Must be equal to or greater than 1. Value out of acceptable range.`);
         }
 
         // Send logger to debug saying loaded, and finish up performance timer.
@@ -171,6 +176,11 @@ class RQC implements IPreAkiLoadMod, IPostDBLoadMod
 
         const timeTaken = performance.now() - start;
         logger.log(`[${this.mod}] Configuration took ${timeTaken.toFixed(3)}ms.`, "yellow");
+    }
+
+    private setMinPlayerLevel(typeQuest, minPlayerLevel)
+    {
+        typeQuest.minPlayerLevel = minPlayerLevel;
     }
 
     private getStaticConfigType()
@@ -213,10 +223,10 @@ class RQC implements IPreAkiLoadMod, IPostDBLoadMod
         }            
         if (i === 2)
         {
-            validationCheck = this.validateDynamicArray(RQC.config.scavTypes, typeString);
+            validationCheck = this.validateDynamicArray(RQC.config.fenceTypes, typeString);
             if (validationCheck)
             {
-                return (RQC.config.scavTypes);
+                return (RQC.config.fenceTypes);
             }
             return null;
         }
@@ -377,6 +387,9 @@ interface Config
     repMultiplier: number,
     skillRewardChanceMultiplier: number,
     skillPointRewardMultiplier: number,
+    dailyMinPlayerLevel: number,
+    weeklyMinPlayerLevel: number,
+    fenceMinPlayerLevel: number,
     useSpecificQuestType: boolean,
     completionOnly: boolean,
     explorationOnly: boolean,
@@ -384,7 +397,7 @@ interface Config
     useRandomQuestType: boolean,
     dailyTypes: string[],
     weeklyTypes: string[],
-    scavTypes: string[],
+    fenceTypes: string[],
     debugLogging: boolean,
 }
 
