@@ -192,10 +192,13 @@ class RQC implements IPreAkiLoadMod, IPostDBLoadMod
         }
 
         // Send logger to debug saying loaded, and finish up performance timer.
-        this.logger.debug(`[${this.mod}] loaded... `);
+        this.logger.debug(`[${this.mod}] loaded...ALL THINGS REPEATABLE...soon tm. `);
 
-        const timeTaken = performance.now() - start;
-        logger.log(`[${this.mod}] Configuration took ${timeTaken.toFixed(3)}ms.`, "yellow");
+        if (RQC.config.debugLogging)
+        {
+            const timeTaken = performance.now() - start;
+            logger.log(`[${this.mod}] Configuration took ${timeTaken.toFixed(1)}ms.`, "yellow");
+        }
     }
 
     private setMinPlayerLevel(typeQuest, minPlayerLevel)
