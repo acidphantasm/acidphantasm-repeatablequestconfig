@@ -1,15 +1,15 @@
 import { DependencyContainer } from "tsyringe";
 
 // SPT types
-import { IPreAkiLoadMod } from "@spt-aki/models/external/IPreAkiLoadMod";
-import { IPostDBLoadMod } from "@spt-aki/models/external/IPostDBLoadMod";
-import { ILogger } from "@spt-aki/models/spt/utils/ILogger";
-import { ConfigServer } from "@spt-aki/servers/ConfigServer";
-import { ConfigTypes } from "@spt-aki/models/enums/ConfigTypes";
+import { IPreSptLoadMod } from "@spt/models/external/IPreSptLoadMod";
+import { IPostDBLoadMod } from "@spt/models/external/IPostDBLoadMod";
+import { ILogger } from "@spt/models/spt/utils/ILogger";
+import { ConfigServer } from "@spt/servers/ConfigServer";
+import { ConfigTypes } from "@spt/models/enums/ConfigTypes";
 import * as fs from "node:fs";
 import * as path from "node:path";
 
-class RQC implements IPreAkiLoadMod, IPostDBLoadMod
+class RQC implements IPreSptLoadMod, IPostDBLoadMod
 {
     private mod: string
     private logger: ILogger
@@ -22,7 +22,7 @@ class RQC implements IPreAkiLoadMod, IPostDBLoadMod
     }
 
     // PreAKILoad
-    public preAkiLoad(container: DependencyContainer): void
+    public preSptLoad(container: DependencyContainer): void
     {
         // Get a logger - I am probably dumb but removing this breaks things - so don't delete it
         this.logger = container.resolve<ILogger>("WinstonLogger");
