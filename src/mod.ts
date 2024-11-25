@@ -39,10 +39,10 @@ class RQC implements IPreSptLoadMod, IPostDBLoadMod
 
         const configServer = container.resolve<ConfigServer>("ConfigServer");
         const questConfig = configServer.getConfig(ConfigTypes.QUEST);
-        const repeatableQuests = questConfig.repeatableQuests;
-        const dailyQuest = repeatableQuests[0];
-        const weeklyQuest = repeatableQuests[1];
-        const fenceQuest = repeatableQuests[2];
+        const repeatableQuestList = questConfig.repeatableQuests;
+        const dailyQuest = repeatableQuestList[0];
+        const weeklyQuest = repeatableQuestList[1];
+        const fenceQuest = repeatableQuestList[2];
 
         if (RQC.config.useSpecificQuestType && !RQC.config.useRandomQuestType)
         {
