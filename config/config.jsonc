@@ -1,0 +1,61 @@
+{
+    // Multipliers for rewards. Currency also applies to GP Coins.
+    // Limits for all multipliers are 0.01 - 5
+    "xpMultiplier": 1,
+    "currencyMultiplier": 1,
+    "repMultiplier": 1,
+    "skillRewardChanceMultiplier": 1,
+    "skillPointRewardMultiplier": 1,
+
+    // Min level to access Daily Quests.
+    // Max number of Daily Quests to generate - Limit 15.
+    // Reset timer (in seconds). This is also how long you have to complete it - Cannot be lower than 3600.
+    "dailyMinPlayerLevel": 5,
+    "dailyNumberOfQuests": 3,
+    "dailyResetTimer": 86400,
+
+    // Min level to access Weekly Quests.
+    // Max number of Weekly Quests to generate- Limit 15.
+    // Reset timer (in seconds). This is also how long you have to complete it - Cannot be lower than 3600.
+    "weeklyMinPlayerLevel": 15,
+    "weeklyNumberOfQuests": 1,
+    "weeklyResetTimer": 604800,
+
+    // Min level to access Fence Quests.
+    // Max number of Fence Quests to generate- Limit 15.
+    // Reset timer (in seconds). This is also how long you have to complete it - Cannot be lower than 3600.
+    // Whether or not to remove the Intel Center LV1 requirement.
+    "fenceMinPlayerLevel": 1,
+    "fenceNumberOfQuests": 1,
+    "fenceResetTimer": 86400,
+    "removeIntelCenterRequirement": true,
+
+    // If you set "useSpecificQuestType" to true then the belo "useRandomQuestType" must be false. Enabling "useSpecificQuestType" only enables one type of quest for all repeatable types.
+    "useSpecificQuestType": false,
+    "completionOnly": false,
+    "explorationOnly": false,
+    "eliminationOnly": false,
+
+    // If you set "useRandomQuestType" to true then the above "useSpecificQuestType" must be false. Enabling "useRandomQuestType" will allow you to set more than 1 type of quest - defaults are below.
+    // Pickup quests are ONLY for Fence Types - do not set them in Daily or Weekly Types.
+    "useRandomQuestType": true,
+    "dailyTypes": [
+        "Exploration",
+        "Elimination",
+        "Completion"
+    ],
+    "weeklyTypes": [
+        "Exploration",
+        "Elimination",
+        "Completion"
+    ],
+    "fenceTypes": [
+        "Exploration",
+        "Elimination",
+        "Completion",
+        "Pickup"
+    ],
+
+    // Only enable if you want to see a LOT of logging, and validate the mod is doing what it says.
+    "debugLogging": false
+}
