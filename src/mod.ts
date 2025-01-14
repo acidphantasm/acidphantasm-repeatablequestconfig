@@ -432,7 +432,7 @@ class RQC implements IPreSptLoadMod, IPostDBLoadMod
         return true;
     }
 
-    private setXPMultiplier(typeQuest, xpMultiplier)
+    private setXPMultiplier(typeQuest: IRepeatableQuestConfig, xpMultiplier)
     {
         typeQuest.rewardScaling.experience = typeQuest.rewardScaling.experience.map((xp) => Math.round(xp * xpMultiplier));
         if (RQC.config.debugLogging)
@@ -452,27 +452,27 @@ class RQC implements IPreSptLoadMod, IPostDBLoadMod
         }
     }
 
-    private setRepMultiplier(typeQuest, repMultiplier)
+    private setRepMultiplier(typeQuest: IRepeatableQuestConfig, repMultiplier)
     {
-        typeQuest.rewardScaling.reputation = typeQuest.rewardScaling.reputation.map((rep) => (rep * repMultiplier).toFixed(2));
+        typeQuest.rewardScaling.reputation = typeQuest.rewardScaling.reputation.map((rep) => rep * repMultiplier);
         if (RQC.config.debugLogging)
         {
             this.logger.log(`[${this.mod}] Reputation Multiplier Set for: [${typeQuest.name}]. Array: [${typeQuest.rewardScaling.reputation}]`, "cyan");
         }
     }
 
-    private setSkillRewardMultiplier(typeQuest, skillRewardMultiplier)
+    private setSkillRewardMultiplier(typeQuest: IRepeatableQuestConfig, skillRewardMultiplier)
     {
-        typeQuest.rewardScaling.skillRewardChance = typeQuest.rewardScaling.skillRewardChance.map((chance) => (chance * skillRewardMultiplier).toFixed(2));
+        typeQuest.rewardScaling.skillRewardChance = typeQuest.rewardScaling.skillRewardChance.map((chance) => chance * skillRewardMultiplier);
         if (RQC.config.debugLogging)
         {
             this.logger.log(`[${this.mod}] Skill Reward Chance Multiplier Set for: [${typeQuest.name}]. Array: [${typeQuest.rewardScaling.skillRewardChance}]`, "cyan");
         }
     }
 
-    private setSkillPointRewardMultiplier(typeQuest, skillPointRewardMultiplier)
+    private setSkillPointRewardMultiplier(typeQuest: IRepeatableQuestConfig, skillPointRewardMultiplier)
     {
-        typeQuest.rewardScaling.skillPointReward = typeQuest.rewardScaling.skillPointReward.map((chance) => (chance * skillPointRewardMultiplier).toFixed(2));
+        typeQuest.rewardScaling.skillPointReward = typeQuest.rewardScaling.skillPointReward.map((chance) => chance * skillPointRewardMultiplier);
         if (RQC.config.debugLogging)
         {
             this.logger.log(`[${this.mod}] Skill Point Reward Multiplier Set for: [${typeQuest.name}]. Array: [${typeQuest.rewardScaling.skillPointReward}]`, "cyan");
