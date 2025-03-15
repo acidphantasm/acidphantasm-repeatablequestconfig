@@ -9,17 +9,17 @@ import { ConfigTypes } from "@spt/models/enums/ConfigTypes";
 import { IQuestConfig, IRepeatableQuestConfig } from "@spt/models/spt/config/IQuestConfig";
 import { IPmcData } from "@spt/models/eft/common/IPmcData";
 import { HideoutAreas } from "@spt/models/enums/HideoutAreas";
-import { VFS } from "@spt/utils/VFS";
 import { jsonc } from "jsonc";
 import * as path from "node:path";
+import { FileSystemSync } from "@spt/utils/FileSystemSync";
 
 class RQC implements IPreSptLoadMod, IPostDBLoadMod
 {
     private mod: string
     private logger: ILogger
     
-    private static vfs = container.resolve<VFS>("VFS");    
-    private static config: Config = jsonc.parse(RQC.vfs.readFile(path.resolve(__dirname, "../config/config.jsonc")));
+    private static fileSystemSync = container.resolve<FileSystemSync>("FileSystemSync");    
+    private static config: Config = jsonc.parse(RQC.fileSystemSync.read(path.resolve(__dirname, "../config/config.jsonc")));
 
     constructor() 
     {
@@ -248,9 +248,6 @@ class RQC implements IPreSptLoadMod, IPostDBLoadMod
         {
             this.logger.error(`[${this.mod}] [ERROR] Unable to set reset timers. Must be higher than 3600 seconds. Value out of acceptable range.`);
         }
-
-        // Send logger to debug saying loaded, and finish up performance timer.
-        this.logger.debug(`[${this.mod}] loaded...ALL THINGS REPEATABLE...soon tm. `);
 
         if (RQC.config.debugLogging)
         {
