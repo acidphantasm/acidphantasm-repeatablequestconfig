@@ -12,6 +12,12 @@ import { HideoutAreas } from "@spt/models/enums/HideoutAreas";
 import { jsonc } from "jsonc";
 import * as path from "node:path";
 import { FileSystemSync } from "@spt/utils/FileSystemSync";
+import { ICompleteQuestRequestData } from "@spt/models/eft/quests/ICompleteQuestRequestData";
+import { QuestHelper } from "@spt/helpers/QuestHelper";
+import { RepeatableQuestGenerator } from "@spt/generators/RepeatableQuestGenerator";
+import { CustomRepeatableQuestController } from "./CustomRepeatableQuestController";
+import { QuestController } from "@spt/controllers/QuestController";
+import { ICloner } from "@spt/utils/cloners/ICloner";
 
 class RQC implements IPreSptLoadMod, IPostDBLoadMod
 {
@@ -29,23 +35,71 @@ class RQC implements IPreSptLoadMod, IPostDBLoadMod
     // PreSPtLoad
     public preSptLoad(container: DependencyContainer): void
     {
+        container.register<CustomRepeatableQuestController>("CustomRepeatableQuestController", CustomRepeatableQuestController);
+        container.register("RepeatableQuestController", { useToken: "CustomRepeatableQuestController" });
+
         container.afterResolution("RepeatableQuestController", (_t, result: any) =>
         {
             result.playerHasDailyScavQuestsUnlocked = (pmcData: IPmcData) =>
             {
                 return this.replacementPlayerHasDailyScavQuestsUnlocked(pmcData);
             }
-        }, {frequency: "Always"});
+        }, 
+        {frequency: "Always"});
+
+        if (RQC.config.instantlyReceiveNewRepeatable)
+        {
+            container.afterResolution("QuestController", (_t, result: QuestController ) =>
+            {
+                result.completeQuest = (pmcData: IPmcData, body: ICompleteQuestRequestData, sessionID: string) => 
+                {
+                    const questHelper = container.resolve<QuestHelper>("QuestHelper");
+                    const repeatableQuestGenerator = container.resolve<RepeatableQuestGenerator>("RepeatableQuestGenerator");
+                    const customGenerateQuestPool = container.resolve<CustomRepeatableQuestController>("CustomRepeatableQuestController");
+                    const cloner = container.resolve<ICloner>("PrimaryCloner");
+                    const questConfig: IQuestConfig = container.resolve<ConfigServer>("ConfigServer").getConfig(ConfigTypes.QUEST);
+    
+                    let newlyGeneratedQuests;
+                    const completedQuestId = body.qid;
+                    for (const repeatableType of pmcData.RepeatableQuests) 
+                    {
+                        const repeatableToReplace = repeatableType.activeQuests.find((activeRepeatable) => activeRepeatable._id === completedQuestId);
+                        if (repeatableToReplace) 
+                        {
+                            const typeToGenerate = repeatableType.name;
+                            const repeatableConfig = questConfig.repeatableQuests.find((questType) => questType.name === typeToGenerate);                        
+                            const questTypePool = customGenerateQuestPool.customGenerateQuestPool(repeatableConfig, pmcData.Info.Level);
+                            const replacementRepeatable = repeatableQuestGenerator.generateRepeatableQuest(sessionID, pmcData.Info.Level, pmcData.TradersInfo, questTypePool, repeatableConfig)
+    
+                            if (replacementRepeatable)
+                            {
+                                replacementRepeatable.side = repeatableConfig.side;
+                                repeatableType.activeQuests.push(replacementRepeatable);
+                                repeatableType.changeRequirement[replacementRepeatable._id] = {
+                                    changeCost: replacementRepeatable.changeCost,
+                                    changeStandingCost: replacementRepeatable.changeStandingCost
+                                }
+                            }
+    
+                            newlyGeneratedQuests = cloner.clone(repeatableType);
+                        }
+                    }
+    
+                    const originalResult = questHelper.completeQuest(pmcData, body, sessionID);
+    
+                    originalResult.profileChanges[sessionID].repeatableQuests = [newlyGeneratedQuests]
+                    return originalResult;
+                }
+            }, 
+            {frequency: "Always"});
+        }
     }
 
     // Replace fence quest unlock check if enabled
     public replacementPlayerHasDailyScavQuestsUnlocked(pmcData: IPmcData)
     {
         if (RQC.config.removeIntelCenterRequirement) return true;
-        else 
-        {
-            return (pmcData?.Hideout?.Areas?.find((hideoutArea) => hideoutArea.type === HideoutAreas.INTEL_CENTER)?.level >= 1);
-        }
+        else  return (pmcData?.Hideout?.Areas?.find((hideoutArea) => hideoutArea.type === HideoutAreas.INTEL_CENTER)?.level >= 1);
     }
 
     // PostDBLoad
@@ -479,6 +533,8 @@ class RQC implements IPreSptLoadMod, IPostDBLoadMod
 
 interface Config 
 {
+    instantlyReceiveNewRepeatable: boolean,
+
     xpMultiplier: number,
     currencyMultiplier: number,
     repMultiplier: number,
