@@ -1,6 +1,6 @@
 {
     // Instantly receive new repeatable of the same cadence type (Daily/Weekly/Scav) after completing one - Disable if you want them to generate like normal
-    "instantlyReceiveNewRepeatable": true,
+    "instantlyReceiveNewRepeatable": false,
 
     // Multipliers for rewards. Currency also applies to GP Coins.
     // Limits for all multipliers are 0.01 - 5
