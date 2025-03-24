@@ -60,6 +60,7 @@ class RQC implements IPreSptLoadMod, IPostDBLoadMod
                     const questConfig: IQuestConfig = container.resolve<ConfigServer>("ConfigServer").getConfig(ConfigTypes.QUEST);
     
                     let newlyGeneratedQuests;
+                    let replaced = false;
                     const completedQuestId = body.qid;
                     for (const repeatableType of pmcData.RepeatableQuests) 
                     {
@@ -79,6 +80,8 @@ class RQC implements IPreSptLoadMod, IPostDBLoadMod
                                     changeCost: replacementRepeatable.changeCost,
                                     changeStandingCost: replacementRepeatable.changeStandingCost
                                 }
+
+                                replaced = true;
                             }
     
                             newlyGeneratedQuests = cloner.clone(repeatableType);
@@ -87,7 +90,7 @@ class RQC implements IPreSptLoadMod, IPostDBLoadMod
     
                     const originalResult = questHelper.completeQuest(pmcData, body, sessionID);
     
-                    originalResult.profileChanges[sessionID].repeatableQuests = [newlyGeneratedQuests]
+                    if (replaced) originalResult.profileChanges[sessionID].repeatableQuests = [newlyGeneratedQuests]
                     return originalResult;
                 }
             }, 
